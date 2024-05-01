@@ -28,16 +28,27 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        var player: Player? = null
         // Add the AdItems to the AdvertisingConfig
-        val advertisingConfig = AdvertisingConfig(listOf(AdItem(AdSource(AdSourceType.Ima, vmap))))
+        val advertisingConfig =
+            AdvertisingConfig(listOf(AdItem(AdSource(AdSourceType.Ima, vmap))), adsManagerAvailableCallback = {
+                it.addAdEventListener {
+                    println(it.type)
+                    if (it.type == AdEvent.AdEventType.AD_BREAK_READY) {
+                        player?.play()
+                    }
+                }
+            })
 
         // Create a new PlayerConfig containing the advertising config. Ads in the AdvertisingConfig will be scheduled automatically.
-        val playerConfig = PlayerConfig(advertisingConfig = advertisingConfig, playbackConfig = PlaybackConfig(isAutoplayEnabled = true))
+        val playerConfig = PlayerConfig(
+            advertisingConfig = advertisingConfig,
+            playbackConfig = PlaybackConfig(isAutoplayEnabled = false)
+        )
 
         // Create new Player with our PlayerConfig
         val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-       val player = Player(
+        player = Player(
             this,
             playerConfig,
             AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey)),
