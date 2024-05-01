@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         val advertisingConfig =
             AdvertisingConfig(listOf(AdItem(AdSource(AdSourceType.Ima, vmap))), adsManagerAvailableCallback = {
                 it.addAdEventListener {
-                    println(it.type)
                     if (it.type == AdEvent.AdEventType.AD_BREAK_READY) {
                         player?.play()
                     }
