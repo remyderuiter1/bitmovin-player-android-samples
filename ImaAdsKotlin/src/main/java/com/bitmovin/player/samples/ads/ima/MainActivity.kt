@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         val postRoll = AdItem("post", fourthAdSource)
 
         val sourceConfig = SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
-//        sourceConfig.options = SourceOptions(600.0, TimelineReferencePoint.Start)
+        sourceConfig.options = SourceOptions(600.0, TimelineReferencePoint.Start)
 
         val vMapUrlNlzietMirko =
             "https://7b936.v.fwmrm.net/ad/g/1?nw=506166&resp=vmap1&prof=506166%3Asanoma_sbs_external_live&csid=nlziet_androidtv&caid=AlEkd473ZiI&vdur=1164.1600341&pvrn=673968&metr=1031&flag=%2Bfbad%2Bemcr%2Bslcb%2Bsltp%2Bamcb%2Bplay;talpa_consent=0&_fw_gdpr=0&app_name=nlziet&app_domain=nlzietnl;"
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         val adsNlziet = AdItem(
             AdSource(
                 AdSourceType.Ima,
-                vMapUrlNlzietMirko
+                vMapUrlNlziet
             )
         )
 
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
 
         // Add the AdItems to the AdvertisingConfig
         val advertisingConfig = AdvertisingConfig(
-            schedule = listOf(adsNlziet),
+            schedule = listOf(adsSample),
             adsManagerAvailableCallback = { adsManager ->
                 adsManager.addAdEventListener {
                     Log.e("testing", "Event: $it")
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
             },
             shouldPlayAdBreak = { adBreak ->
                 Log.e("testing", "Checking shouldPlayAd")
-                false
+                true
             },
         )
 

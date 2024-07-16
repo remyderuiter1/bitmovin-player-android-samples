@@ -75,9 +75,9 @@ class MainActivity : AppCompatActivity() {
         // Set up a post-roll ad
         val postRoll = AdItem("post", fourthAdSource)
 
-        val sourceConfig = SourceConfig("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd", SourceType.Dash)
-//        val sourceConfig = SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash)
-//        sourceConfig.options = SourceOptions(300.0, TimelineReferencePoint.Start)
+//        val sourceConfig = SourceConfig("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd", SourceType.Dash)
+        val sourceConfig = SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash)
+        sourceConfig.options = SourceOptions(300.0, TimelineReferencePoint.Start)
 
 
         val vMapUrlNlzietMirko =
@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         val adsNlziet = AdItem(
             AdSource(
                 AdSourceType.Ima,
-                vMapUrlNlzietMirko
+                vMapUrlNlziet
             )
         )
         val vMapUrlTest =
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
         // Add the AdItems to the AdvertisingConfig
         val advertisingConfig = AdvertisingConfig(
-            schedule = listOf(adsNlziet),
+            schedule = listOf(adsSample),
 //            schedule = listOf(preRoll, midRoll, postRoll),
             adsManagerAvailableCallback = { adsManager ->
 //                adsManager.addAdEventListener {
@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity() {
         binding.playerRootLayout.addView(playerView, 0)
 
         // Create a new SourceConfig. In this case we are loading a DASH source.
-        val sourceURL = "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd"
+//        val sourceURL = "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd"
 
         player.load(sourceConfig)
     }
