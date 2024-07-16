@@ -50,23 +50,27 @@ class MainActivity : AppCompatActivity() {
         val postRoll = AdItem("post", fourthAdSource)
 
         val sourceConfig = SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
-        sourceConfig.options = SourceOptions(600.0, TimelineReferencePoint.Start)
+//        sourceConfig.options = SourceOptions(600.0, TimelineReferencePoint.Start)
+
+        val vMapUrlNlzietMirko =
+            "https://7b936.v.fwmrm.net/ad/g/1?nw=506166&resp=vmap1&prof=506166%3Asanoma_sbs_external_live&csid=nlziet_androidtv&caid=AlEkd473ZiI&vdur=1164.1600341&pvrn=673968&metr=1031&flag=%2Bfbad%2Bemcr%2Bslcb%2Bsltp%2Bamcb%2Bplay;talpa_consent=0&_fw_gdpr=0&app_name=nlziet&app_domain=nlzietnl;"
 
         val vMapUrlNlziet =
             "https://7b936.v.fwmrm.net/ad/g/1?caid=6kJ8xWlwVXZ&csid=NLZIETAndroidExoPlayer&vdur=2194.3200683&pvrn=432932&vprn=700853&_fw_gdpr=0&metr=1031&resp=vmap1&nw=506166&prof=506166%3Asanoma_sbs_external_live&flag=%2Bfbad%2Bemcr%2Bslcb%2Bsltp%2Bamcb%2Bplay;talpa_consent%3D0"
         val adsNlziet = AdItem(
             AdSource(
                 AdSourceType.Ima,
-                vMapUrlNlziet
+                vMapUrlNlzietMirko
             )
         )
+
         val vMapUrlTest =
             "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpremidpostlongpod&ciu_szs=300x250&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&impl=s&cmsid=496&vid=short_onecue&correlator="
         val adsSample = AdItem(AdSource(AdSourceType.Ima, vMapUrlTest))
 
         // Add the AdItems to the AdvertisingConfig
         val advertisingConfig = AdvertisingConfig(
-            schedule = listOf(adsSample),
+            schedule = listOf(adsNlziet),
             adsManagerAvailableCallback = { adsManager ->
                 adsManager.addAdEventListener {
                     Log.e("testing", "Event: $it")
