@@ -64,7 +64,6 @@ class MainActivity : AppCompatActivity() {
 
         // Add the AdItems to the AdvertisingConfig
         val advertisingConfig = AdvertisingConfig(
-//            schedule = listOf(adsSample), //Using the scheduleAd instead
             shouldPlayAdBreak = { adBreak ->
                 val playing = if ((adBreak.scheduleTime * 1000L) > 5.0) true else false
                 println("testing schedule time ${adBreak.scheduleTime} will play $playing")
@@ -79,14 +78,12 @@ class MainActivity : AppCompatActivity() {
         )
 
         // Create a new PlayerConfig containing the advertising config. Ads in the AdvertisingConfig will be scheduled automatically.
-        val playerConfig = PlayerConfig(
-            advertisingConfig = advertisingConfig
-        )
+        val playerConfig = PlayerConfig(advertisingConfig = advertisingConfig)
 
         player = PlayerBuilder(this.applicationContext).setPlayerConfig(playerConfig).build()
 
         // Create new Player with our PlayerConfig
-        val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
+//        val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
 //        val player: Player = Player(
 //            this,
 //            PlayerConfig(),
