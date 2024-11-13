@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         val postRoll = AdItem("post", fourthAdSource)
 
         val sourceConfig = SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
-        sourceConfig.options = SourceOptions(5.0, TimelineReferencePoint.Start)
+        sourceConfig.options = SourceOptions(15.0, TimelineReferencePoint.Start)
 
         val vMapUrlNlziet = "https://7b936.v.fwmrm.net/ad/g/1?nw=506166&resp=vmap1&prof=506166%3Asanoma_sbs_external_live&csid=nlziet_android&caid=GVXm8aQvyck&vdur=2450&pvrn=857738&metr=1031&flag=%2Bfbad%2Bemcr%2Bslcb%2Bsltp%2Bamcb%2Bplay;_fw_h_x_country=NL&talpa_consent=0&_fw_gdpr=0;"
 
@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         // Add the AdItems to the AdvertisingConfig
         val advertisingConfig = AdvertisingConfig(
             shouldPlayAdBreak = { adBreak ->
-                val playing = if ((adBreak.scheduleTime * 1000L) > 5.0) true else false
+                val playing = if ((adBreak.scheduleTime) > 15.0) true else false
                 println("testing schedule time ${adBreak.scheduleTime} will play $playing")
                 playing
             },
