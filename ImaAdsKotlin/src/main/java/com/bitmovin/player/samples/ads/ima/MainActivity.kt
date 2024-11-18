@@ -1,10 +1,8 @@
 package com.bitmovin.player.samples.ads.ima
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerBuilder
@@ -14,7 +12,8 @@ import com.bitmovin.player.api.advertising.AdSource
 import com.bitmovin.player.api.advertising.AdSourceType
 import com.bitmovin.player.api.advertising.AdvertisingConfig
 import com.bitmovin.player.api.advertising.ima.ImaConfig
-import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
+import com.bitmovin.player.api.event.PlayerEvent
+import com.bitmovin.player.api.event.on
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceOptions
 import com.bitmovin.player.api.source.TimelineReferencePoint
@@ -31,6 +30,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     lateinit var player: Player
+
+    val vMapUrlTest =
+        "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpremidpostlongpod&ciu_szs=300x250&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&impl=s&cmsid=496&vid=short_onecue&correlator="
+    val adsSample = AdItem(AdSource(AdSourceType.Ima, vMapUrlTest))
+    val sourceConfig = SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
+    var playAdds = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,16 +61,10 @@ class MainActivity : AppCompatActivity() {
         val sourceConfig = SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
         sourceConfig.options = SourceOptions(15.0, TimelineReferencePoint.Start)
 
-        val vMapUrlNlziet = "https://7b936.v.fwmrm.net/ad/g/1?nw=506166&resp=vmap1&prof=506166%3Asanoma_sbs_external_live&csid=nlziet_android&caid=GVXm8aQvyck&vdur=2450&pvrn=857738&metr=1031&flag=%2Bfbad%2Bemcr%2Bslcb%2Bsltp%2Bamcb%2Bplay;_fw_h_x_country=NL&talpa_consent=0&_fw_gdpr=0;"
-
-        val vMapUrlTest =
-            "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpremidpostlongpod&ciu_szs=300x250&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&impl=s&cmsid=496&vid=short_onecue&correlator="
-        val adsSample = AdItem(AdSource(AdSourceType.Ima, vMapUrlTest))
-
         // Add the AdItems to the AdvertisingConfig
         val advertisingConfig = AdvertisingConfig(
             shouldPlayAdBreak = { adBreak ->
-                val playing = if ((adBreak.scheduleTime) > 15.0) true else false
+                val playing = playAdds
                 println("testing schedule time ${adBreak.scheduleTime} will play $playing")
                 playing
             },
@@ -82,6 +81,12 @@ class MainActivity : AppCompatActivity() {
 
         player = PlayerBuilder(this.applicationContext).setPlayerConfig(playerConfig).build()
 
+        player.on<PlayerEvent.TimeChanged> {
+            if (it.time > 500.0) {
+                playNextVideo()
+            }
+        }
+
         // Create new Player with our PlayerConfig
 //        val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
 //        val player: Player = Player(
@@ -89,7 +94,6 @@ class MainActivity : AppCompatActivity() {
 //            PlayerConfig(),
 //            AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey)),
 //        )
-
 
         playerView = PlayerView(
             this, player,
@@ -101,12 +105,18 @@ class MainActivity : AppCompatActivity() {
         }
         playerView.keepScreenOn = true
         player.load(sourceConfig)
-//        player.scheduleAd(midRoll)
         player.scheduleAd(adsSample)
         player.play()
 
         // Add PlayerView to the layout
         binding.root.addView(playerView, 0)
+    }
+
+    private fun playNextVideo(){
+        playAdds = true
+        player.load(sourceConfig)
+        player.scheduleAd(adsSample) // Without scheduleAd the next video plays without crash
+        player.play()
     }
 
     override fun onStart() {
