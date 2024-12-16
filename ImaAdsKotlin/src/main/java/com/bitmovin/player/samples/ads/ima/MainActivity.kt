@@ -58,13 +58,14 @@ class MainActivity : AppCompatActivity() {
         // Set up a post-roll ad
         val postRoll = AdItem("post", fourthAdSource)
 
+        val startOffset: Double = 35.0
         val sourceConfig = SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
-        sourceConfig.options = SourceOptions(15.0, TimelineReferencePoint.Start)
+//        sourceConfig.options = SourceOptions(startOffset, TimelineReferencePoint.Start)
 
         // Add the AdItems to the AdvertisingConfig
         val advertisingConfig = AdvertisingConfig(
             shouldPlayAdBreak = { adBreak ->
-                val playing = playAdds
+                val playing = adBreak.scheduleTime > startOffset
                 println("testing schedule time ${adBreak.scheduleTime} will play $playing")
                 playing
             },
@@ -81,20 +82,6 @@ class MainActivity : AppCompatActivity() {
 
         player = PlayerBuilder(this.applicationContext).setPlayerConfig(playerConfig).build()
 
-        player.on<PlayerEvent.TimeChanged> {
-            if (it.time > 500.0) {
-                playNextVideo()
-            }
-        }
-
-        // Create new Player with our PlayerConfig
-//        val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-//        val player: Player = Player(
-//            this,
-//            PlayerConfig(),
-//            AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey)),
-//        )
-
         playerView = PlayerView(
             this, player,
         ).apply {
@@ -110,13 +97,6 @@ class MainActivity : AppCompatActivity() {
 
         // Add PlayerView to the layout
         binding.root.addView(playerView, 0)
-    }
-
-    private fun playNextVideo(){
-        playAdds = true
-        player.load(sourceConfig)
-        player.scheduleAd(adsSample) // Without scheduleAd the next video plays without crash
-        player.play()
     }
 
     override fun onStart() {
