@@ -58,9 +58,9 @@ class MainActivity : AppCompatActivity() {
         // Set up a post-roll ad
         val postRoll = AdItem("post", fourthAdSource)
 
-        val startOffset: Double = 35.0
+        val startOffset: Double = 25.0
         val sourceConfig = SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
-//        sourceConfig.options = SourceOptions(startOffset, TimelineReferencePoint.Start)
+        sourceConfig.options = SourceOptions(startOffset, TimelineReferencePoint.Start)
 
         // Add the AdItems to the AdvertisingConfig
         val advertisingConfig = AdvertisingConfig(
